@@ -1,19 +1,18 @@
-import React from 'react'
-import _ from 'lodash/fp/placeholder'
-import flow from 'lodash/fp/flow'
 // import get from 'lodash/fp/get'
+import React from 'react'
+import flow from 'lodash/fp/flow'
 import merge from 'lodash/fp/merge'
 import { Box2, FieldSelect, FieldText } from '@looker/components'
 import { DebugState } from './DebugState.component'
-import { FormProps } from '../types'
-import type { Pet } from './usePetValidation.hook'
+import { FormProps, IFormContext, Pet } from '../types'
+import { ValidationObject } from '@de-formed/base'
 import { createFakeEvent, eventNameValue } from '@de-formed/base'
 import { transformError } from '../utils'
-import { useForm } from './CreactContact.component'
+import { useForm } from './useForm.hook'
 
 export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
   const {
-    petValidations: {
+    pet: {
       getError,
       resetValidationState,
       validateAll,
@@ -23,7 +22,7 @@ export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
     },
     submitFailed,
     resetValidation,
-  } = useForm()
+  } = useForm() as IFormContext & { pet: ValidationObject<Pet> }
 
   const handleChange = flow(eventNameValue, merge(data), onChange)
 
@@ -41,7 +40,7 @@ export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
   }, [submitFailed, data])
 
   React.useEffect(() => {
-    resetValidation && resetValidationState()
+    resetValidationState()
   }, [resetValidation])
 
   return (

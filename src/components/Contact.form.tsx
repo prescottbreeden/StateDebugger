@@ -1,36 +1,31 @@
-// import get from 'lodash/fp/get'
 import React from 'react'
-import _ from 'lodash/fp/placeholder'
 import flow from 'lodash/fp/flow'
 import merge from 'lodash/fp/merge'
-import type { Contact } from './useContactValidation.hook'
-import type { FormProps } from '../types'
+import type { Contact, FormProps, IFormContext } from '../types'
 import { Box2, FieldText, Heading } from '@looker/components'
-import { DebugState } from './DebugState.component'
 import { PetForm } from './Pet.form'
 import { eventNameValue } from '@de-formed/base'
 import { set, transformError } from '../utils'
-import { useForm } from './CreactContact.component'
+import { useForm } from './useForm.hook'
+import { ValidationObject } from '@de-formed/base'
 
 export const ContactForm: React.FC<FormProps<Contact>> = ({
   data,
   onChange,
 }) => {
   const {
-    contactValidations: {
+    contact: {
       getError,
       resetValidationState,
       validateAll,
       validateOnBlur,
       validateOnChange,
-      validationState,
     },
     submitFailed,
     resetValidation,
-  } = useForm()
+  } = useForm() as IFormContext & { contact: ValidationObject<Contact> }
 
   const handleChange = flow(eventNameValue, merge(data), onChange)
-
   const handlePetChange = flow(set('pet'), merge(data), onChange)
 
   React.useEffect(() => {
@@ -38,16 +33,11 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
   }, [submitFailed, data])
 
   React.useEffect(() => {
-    resetValidation && resetValidationState()
+    resetValidationState()
   }, [resetValidation])
 
   return (
     <>
-      <DebugState
-        state={validationState}
-        darkMode={false}
-        windowName="Contact Validation State"
-      />
       <Box2 mb="1rem">
         <FieldText
           label="First Name"

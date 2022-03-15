@@ -1,10 +1,6 @@
 import { useValidation } from '@de-formed/react-validations'
+import { Pet } from '../types'
 
-export type Pet = {
-  name: string
-  favoriteFood: string
-  type: string
-}
 export const usePetValdiation = () => {
   return useValidation<Pet>({
     name: [

@@ -1,14 +1,9 @@
 import { useValidation } from '@de-formed/react-validations'
-import { Pet, usePetValdiation } from './usePetValidation.hook'
+import { Contact } from '../types'
+import { usePetValdiation } from './usePetValidation.hook'
 const F = (_?: any) => false
+const T = (_?: any) => true
 
-export type Contact = {
-  firstName: string
-  lastName: string
-  email: string
-  pet: Pet
-  phones: any[]
-}
 export const useContactValdiation = () => {
   const { validateAll: validatePet } = usePetValdiation()
   return useValidation<Contact>({
@@ -47,7 +42,7 @@ export const useContactValdiation = () => {
     phones: [
       {
         error: 'At least one valid phone number is required',
-        validation: F,
+        validation: T,
       },
     ],
   })

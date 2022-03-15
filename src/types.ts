@@ -1,5 +1,13 @@
 import { ValidationState } from '@de-formed/base'
 
+export type IFormContext = {
+  FormContext: React.Context<IFormContext>
+  submitFailed: boolean
+  setSubmitFailed: (submitFailed: boolean) => void
+  resetValidation: boolean
+  setResetValidation: (resetValidation: boolean) => void
+}
+
 export type MultipleValidationState = {
   [key: string]: ValidationState
 }
@@ -16,3 +24,31 @@ export type DynamicFormProps = {
   onChange: (event: any) => any
   removeForm: (data: any) => void
 }
+
+export type Contact = {
+  firstName: string
+  lastName: string
+  email: string
+  pet: Pet
+  phones: any[]
+}
+
+export const ContactFactory = (): Contact => ({
+  firstName: '',
+  lastName: '',
+  email: '',
+  pet: PetFactory(),
+  phones: [],
+})
+
+export type Pet = {
+  name: string
+  favoriteFood: string
+  type: string
+}
+
+export const PetFactory = (): Pet => ({
+  name: '',
+  favoriteFood: '',
+  type: '',
+})
