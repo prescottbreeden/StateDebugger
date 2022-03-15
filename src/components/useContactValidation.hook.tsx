@@ -14,14 +14,22 @@ export const useContactValdiation = () => {
   return useValidation<Contact>({
     firstName: [
       {
-        error: 'First name is required',
+        error: 'First Name is required',
         validation: ({ firstName }) => firstName.length > 0,
+      },
+      {
+        error: 'First Name must be at least 2 characters',
+        validation: ({ firstName }) => firstName.length > 1,
       },
     ],
     lastName: [
       {
-        error: 'Last name is required',
+        error: 'Last Name is required',
         validation: ({ lastName }) => lastName.length > 0,
+      },
+      {
+        error: 'Last Name must be at least 2 characters',
+        validation: ({ lastName }) => lastName.length > 1,
       },
     ],
     email: [
@@ -38,7 +46,7 @@ export const useContactValdiation = () => {
     ],
     phones: [
       {
-        error: 'Phone is required',
+        error: 'At least one valid phone number is required',
         validation: F,
       },
     ],

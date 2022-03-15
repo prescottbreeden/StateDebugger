@@ -102,7 +102,7 @@ export const DebugState: React.FC<DebugStateProps> = ({
                   aria-label="Copy to clipboard"
                   className="hover-pointer"
                   onClick={copy}
-                  tabIndex={0}
+                  tabIndex={-1}
                   title="Copy to clipboard"
                   style={{
                     backgroundColor: 'transparent',
@@ -139,6 +139,7 @@ export const DebugState: React.FC<DebugStateProps> = ({
                 }}
               >
                 <button
+                  tabIndex={-1}
                   style={{ padding: '2px 3px' }}
                   onClick={() => setZIndex(zIndex + 1)}
                 >
@@ -146,6 +147,7 @@ export const DebugState: React.FC<DebugStateProps> = ({
                 </button>
                 <span style={{ margin: '0 1px' }}>|</span>
                 <button
+                  tabIndex={-1}
                   style={{ padding: '2px 3px' }}
                   onClick={() => setZIndex(zIndex - 1)}
                 >

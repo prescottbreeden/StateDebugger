@@ -1,12 +1,15 @@
+import { ComponentsProvider } from '@looker/components'
 import React from 'react'
 import './App.css'
 import { CreateContact } from './components/CreactContact.component'
 
 function App() {
   return (
-    <div className="App">
-      <CreateContact />
-    </div>
+    <ComponentsProvider>
+      <div className="App">
+        <CreateContact />
+      </div>
+    </ComponentsProvider>
   )
 }
 
