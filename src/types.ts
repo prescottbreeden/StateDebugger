@@ -32,7 +32,7 @@ export type Contact = {
   email: string
   pet: Pet
   phones: Phone[]
-  bestFriend: Contact
+  bestFriend: Contact | undefined
 }
 
 export const ContactFactory = (): Contact => ({
@@ -42,7 +42,7 @@ export const ContactFactory = (): Contact => ({
   email: '',
   pet: PetFactory(),
   phones: [PhoneFactory()],
-  bestFriend: ContactFactory(),
+  bestFriend: undefined,
 })
 
 export type Pet = {
