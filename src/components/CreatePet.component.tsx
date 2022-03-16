@@ -3,43 +3,31 @@ import { Box2, Button, Heading } from '@looker/components'
 import { Pet, PetFactory } from '../types'
 import { PetForm } from '../forms/Pet.form'
 import { Query } from '../App'
-import { useFormProvider } from '../hooks/useForm.hook'
+import { FormContext, useFormProvider } from '../hooks/useForm.hook'
 import { usePetValdiation } from '../hooks/usePetValidation.hook'
 
 export const CreatePet: React.FC = () => {
   const [pet, setPet] = React.useState<Pet>(PetFactory())
-
-  const formProps = useFormProvider()
-  const {
-    FormContext,
-    resetValidation,
-    setSubmitFailed,
-    setResetValidation,
-  } = formProps
-
-  const validations = {
-    [pet.id]: usePetValdiation(),
-  }
+  const { validateAll } = usePetValdiation()
+  const form = useFormProvider()
 
   const handleSubmit = () => {
-    if (validations[pet.id].validateAll(pet)) {
-      setSubmitFailed(false)
-      Query(pet).then((response: any) => {
-        validations[pet.id].setValidationState(response.pet)
-      })
+    if (validateAll(pet)) {
+      form.setSubmitFailed(false)
+      Query(pet).then(form.setAPIerrors) // faked server call
     } else {
-      setSubmitFailed(true)
+      form.setSubmitFailed(true)
     }
   }
 
   const handleReset = () => {
     setPet(PetFactory())
-    setResetValidation(!resetValidation)
-    setSubmitFailed(false)
+    form.setResetValidation(!form.resetValidation)
+    form.setSubmitFailed(false)
   }
 
   return (
-    <FormContext.Provider value={{ ...formProps, ...validations }}>
+    <FormContext.Provider value={form}>
       <Box2 width="20rem">
         <Heading mb="1rem">Create Pet</Heading>
         <PetForm onChange={setPet} data={pet} />

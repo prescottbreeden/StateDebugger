@@ -1,5 +1,6 @@
 import React from 'react'
 import flow from 'lodash/fp/flow'
+import get from 'lodash/fp/get'
 import merge from 'lodash/fp/merge'
 import { Box2, FieldText } from '@looker/components'
 import { FormProps, Phone } from '../types'
@@ -18,16 +19,24 @@ export const PhoneForm: React.FC<FormProps<Phone>> = ({ data, onChange }) => {
     validateAll,
     validateOnBlur,
     validateOnChange,
+    validationState,
   } = usePhoneValidation()
 
   const handleChange = flow(eventNameValue, merge(data), onChange)
+
+  // merge the API errors with the current validationState
+  const mergeApiErrors = flow(
+    get(data.id),
+    merge(validationState),
+    setValidationState
+  )
 
   React.useEffect(() => {
     submitFailed && validateAll(data)
   }, [submitFailed, data])
 
   React.useEffect(() => {
-    APIerrors[data.id] && setValidationState(APIerrors[data.id])
+    APIerrors[data.id] && mergeApiErrors(APIerrors)
   }, [APIerrors])
 
   React.useEffect(() => {

@@ -1,3 +1,5 @@
+import cond from 'lodash/fp/cond'
+import otherwise from 'lodash/fp/stubTrue'
 import React from 'react'
 import Draggable from 'react-draggable'
 
@@ -48,7 +50,7 @@ export const DebugState: React.FC<DebugStateProps> = ({
   noBorder,
   noHelp,
   noTitle,
-  setState = () => null,
+  setState = undefined,
   state,
   transparent,
   useTabIndex = false,
@@ -97,6 +99,32 @@ export const DebugState: React.FC<DebugStateProps> = ({
       : darkMode
   const color = mode ? '#fff' : '#000'
   const backgroundColor = mode ? '#333' : '#fff'
+  const CancelButton = () => (
+    <button
+      tabIndex={useTabIndex ? 0 : -1}
+      onClick={() => setShowPaste(false)}
+      style={defaultButton}
+    >
+      Cancel
+    </button>
+  )
+
+  const PasteButton = () => (
+    <button
+      tabIndex={useTabIndex ? 0 : -1}
+      onClick={() => setShowPaste(true)}
+      style={defaultButton}
+    >
+      Paste JSON
+    </button>
+  )
+
+  const Button = () =>
+    cond([
+      [() => !setState, () => <div />],
+      [() => showPaste, CancelButton],
+      [otherwise, PasteButton],
+    ])(null)
 
   return (
     <>
@@ -163,7 +191,7 @@ export const DebugState: React.FC<DebugStateProps> = ({
                 </svg>
               </button>
             </div>
-            {showPaste ? (
+            {setState && showPaste ? (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <textarea
                   tabIndex={useTabIndex ? 0 : -1}
@@ -206,23 +234,7 @@ export const DebugState: React.FC<DebugStateProps> = ({
                 fontFamily: 'monospace',
               }}
             >
-              {showPaste ? (
-                <button
-                  tabIndex={useTabIndex ? 0 : -1}
-                  onClick={() => setShowPaste(false)}
-                  style={defaultButton}
-                >
-                  Cancel
-                </button>
-              ) : (
-                <button
-                  tabIndex={useTabIndex ? 0 : -1}
-                  onClick={() => setShowPaste(true)}
-                  style={defaultButton}
-                >
-                  Paste JSON
-                </button>
-              )}
+              <Button />
               <div>
                 <button
                   onClick={() => setZIndex(zIndex + 10)}

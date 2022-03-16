@@ -1,5 +1,6 @@
 import React from 'react'
 import flow from 'lodash/fp/flow'
+import get from 'lodash/fp/get'
 import merge from 'lodash/fp/merge'
 import { Box2, FieldSelect, FieldText } from '@looker/components'
 import { FormProps, Pet } from '../types'
@@ -18,6 +19,7 @@ export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
     validateAll,
     validateOnBlur,
     validateOnChange,
+    validationState,
   } = usePetValdiation()
 
   const handleChange = flow(eventNameValue, merge(data), onChange)
@@ -31,12 +33,19 @@ export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
     { value: 'other', label: 'Other' },
   ]
 
+  // merge the API errors with the current validationState
+  const mergeApiErrors = flow(
+    get(data.id),
+    merge(validationState),
+    setValidationState
+  )
+
   React.useEffect(() => {
     submitFailed && validateAll(data)
   }, [submitFailed, data])
 
   React.useEffect(() => {
-    APIerrors[data.id] && setValidationState(APIerrors[data.id])
+    APIerrors[data.id] && mergeApiErrors(APIerrors)
   }, [APIerrors])
 
   React.useEffect(() => {

@@ -1,5 +1,6 @@
 import React from 'react'
 import flow from 'lodash/fp/flow'
+import get from 'lodash/fp/get'
 import merge from 'lodash/fp/merge'
 import { Box2, FieldText, Heading } from '@looker/components'
 import { Contact, FormProps, Phone, PhoneFactory } from '../types'
@@ -16,7 +17,7 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
   data,
   onChange,
 }) => {
-  const { APIerrors, submitFailed, resetValidation } = useForm()
+  const { APIerrors, setAPIerrors, submitFailed, resetValidation } = useForm()
 
   const {
     getError,
@@ -51,12 +52,19 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
     onChange
   )
 
+  // merge the API errors with the current validationState
+  const mergeApiErrors = flow(
+    get(data.id),
+    merge(validationState),
+    setValidationState
+  )
+
   React.useEffect(() => {
     submitFailed && validateAll(data)
   }, [submitFailed, data])
 
   React.useEffect(() => {
-    APIerrors[data.id] && setValidationState(APIerrors[data.id])
+    APIerrors[data.id] && mergeApiErrors(APIerrors)
   }, [APIerrors])
 
   React.useEffect(() => {
@@ -74,6 +82,12 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
         state={validationState}
         darkMode={false}
         modalTitle="Contact Validation State"
+      />
+      <DebugState
+        state={APIerrors}
+        setState={setAPIerrors}
+        darkMode={false}
+        modalTitle="API Errors"
       />
       <Box2 mb="1rem">
         <FieldText

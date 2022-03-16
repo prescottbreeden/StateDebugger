@@ -9,37 +9,27 @@ import { useContactValdiation } from '../hooks/useContactValidation.hook'
 
 export const CreateContact: React.FC = () => {
   const [contact, setContact] = React.useState<Contact>(ContactFactory())
-
-  const formProps = useFormProvider()
-  const {
-    resetValidation,
-    setSubmitFailed,
-    setResetValidation,
-    setAPIerrors,
-  } = formProps
-
   const { validateAll } = useContactValdiation()
+  const form = useFormProvider()
 
   const handleSubmit = () => {
     if (validateAll(contact)) {
-      setSubmitFailed(false)
-      Query(contact).then((response: any) => {
-        setAPIerrors(response)
-      })
+      form.setSubmitFailed(false)
+      Query(contact).then(form.setAPIerrors) // faked server call
     } else {
-      setSubmitFailed(true)
+      form.setSubmitFailed(true)
     }
   }
 
   const handleReset = () => {
     setContact(ContactFactory())
-    setResetValidation(!resetValidation)
-    setSubmitFailed(false)
+    form.setResetValidation(!form.resetValidation)
+    form.setSubmitFailed(false)
   }
 
   return (
     <>
-      <FormContext.Provider value={formProps}>
+      <FormContext.Provider value={form}>
         <Box2 width="20rem" border="1px solid black">
           <Heading mb="1rem">Create Contact</Heading>
           <ContactForm data={contact} onChange={over([setContact])} />
