@@ -1,28 +1,34 @@
 import React from 'react'
 import { Box2, Button, Heading } from '@looker/components'
-import { FormProvider } from '../hooks/useForm.hook'
+import { useFormProvider } from '../hooks/useForm.hook'
 import { Pet, PetFactory } from '../types'
 import { PetForm } from '../forms/Pet.form'
 import { Query } from '../App'
 import { usePetValdiation } from '../hooks/usePetValidation.hook'
+import { ValidationObject } from '@de-formed/base'
 
-interface CreatePetProps {}
-export const CreatePet: React.FC<CreatePetProps> = () => {
+type Dingo = { [key: string]: ValidationObject<any> }
+
+export const CreatePet: React.FC = () => {
   const [pet, setPet] = React.useState<Pet>(PetFactory())
 
-  const formProps = FormProvider()
-  const { FormContext, resetValidation, setSubmitFailed, setResetValidation } =
-    formProps
+  const formProps = useFormProvider()
+  const {
+    FormContext,
+    resetValidation,
+    setSubmitFailed,
+    setResetValidation,
+  } = formProps
 
   const validations = {
-    pet: usePetValdiation(),
+    [pet.id]: usePetValdiation(),
   }
 
   const handleSubmit = () => {
-    if (validations.pet.validateAll(pet)) {
+    if (validations[pet.id].validateAll(pet)) {
       setSubmitFailed(false)
       Query(pet).then((response: any) => {
-        validations.pet.setValidationState(response.pet)
+        validations[pet.id].setValidationState(response.pet)
       })
     } else {
       setSubmitFailed(true)

@@ -1,39 +1,67 @@
 import React from 'react'
 import flow from 'lodash/fp/flow'
 import merge from 'lodash/fp/merge'
-import type { Contact, FormProps, IFormContext } from '../types'
+import { Contact, FormProps, Phone, PhoneFactory } from '../types'
 import { Box2, FieldText, Heading } from '@looker/components'
 import { PetForm } from './Pet.form'
 import { eventNameValue } from '@de-formed/base'
 import { set, transformError } from '../utils'
-import { useForm } from '../hooks/useForm.hook'
-import { ValidationObject } from '@de-formed/base'
+import { randomString, useForm } from '../hooks/useForm.hook'
 import { DynamicForm } from './Dynamic.form'
 import { PhoneForm } from './Phone.form'
 import { DebugState } from '../components/DebugState.component'
+import { useContactValdiation } from '../hooks/useContactValidation.hook'
+
+export const replaceItem = (list: any[]) => (b: any) => {
+  return list.map((a: any) => (a.id === b.id ? b : a))
+}
 
 export const ContactForm: React.FC<FormProps<Contact>> = ({
   data,
   onChange,
 }) => {
+  const { APIerrors, submitFailed, resetValidation } = useForm()
+
   const {
-    contact: {
-      getError,
-      resetValidationState,
-      validateAll,
-      validateOnBlur,
-      validateOnChange,
-    },
-    submitFailed,
-    resetValidation,
-  } = useForm() as IFormContext & { contact: ValidationObject<Contact> }
+    getError,
+    resetValidationState,
+    setValidationState,
+    validateAll,
+    validateOnBlur,
+    validateOnChange,
+    validationState,
+  } = useContactValdiation()
 
   const handleChange = flow(eventNameValue, merge(data), onChange)
   const handlePetChange = flow(set('pet'), merge(data), onChange)
 
+  const addNewPhone = () =>
+    onChange({
+      ...data,
+      phones: [...data.phones, { ...PhoneFactory(), id: randomString() }],
+    })
+
+  const deletePhone = (p1: Phone) => {
+    const phones = data.phones.filter((p2: Phone) => {
+      return p1.id !== p2.id
+    })
+    return onChange({ ...data, phones })
+  }
+
+  const updatePhone = flow(
+    replaceItem(data.phones),
+    set('phones'),
+    merge(data),
+    onChange
+  )
+
   React.useEffect(() => {
     submitFailed && validateAll(data)
   }, [submitFailed, data])
+
+  React.useEffect(() => {
+    APIerrors[data.id] && setValidationState(APIerrors[data.id])
+  }, [APIerrors])
 
   React.useEffect(() => {
     resetValidationState()
@@ -45,6 +73,11 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
         state={data}
         darkMode={false}
         modalTitle="Contact Form State"
+      />
+      <DebugState
+        state={validationState}
+        darkMode={false}
+        modalTitle="Contact Validation State"
       />
       <Box2 mb="1rem">
         <FieldText
@@ -77,16 +110,15 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
         />
       </Box2>
       <Box2 mb="1rem">
-        <Heading mb="1rem">Add Phones</Heading>
+        <Heading mb="1rem">Add Phone</Heading>
         <DynamicForm
-          addForm={() => null}
+          addForm={addNewPhone}
           form={PhoneForm}
           items={data.phones}
-          onChange={() => null}
-          removeForm={() => null}
+          onChange={updatePhone}
+          removeForm={deletePhone}
         />
       </Box2>
-
       <Box2>
         <Heading mb="1rem">Add Pet</Heading>
         <PetForm onChange={handlePetChange} data={data.pet} />

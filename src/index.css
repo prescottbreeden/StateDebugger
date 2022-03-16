@@ -19,3 +19,17 @@ code {
 .hover-pointer:hover {
   cursor: pointer;
 }
+
+.button--delete {
+  height: 1rem;
+  width: 1rem;
+  position: absolute;
+  top: 1.8rem;
+  left: .2rem;
+  z-index: 6;
+  fill: #bb3131;
+  overflow: hidden
+}
+.button--delete:hover {
+  cursor: pointer;
+}

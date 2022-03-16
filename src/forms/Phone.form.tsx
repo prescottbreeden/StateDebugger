@@ -1,27 +1,34 @@
 import { Box2, FieldText } from '@looker/components'
 import React from 'react'
+import flow from 'lodash/fp/flow'
+import merge from 'lodash/fp/merge'
+import { eventNameValue } from '@de-formed/base'
 import { useForm } from '../hooks/useForm.hook'
-import { FormProps, IFormContext, Phone } from '../types'
-import { ValidationObject } from '@de-formed/base'
+import { FormProps, Phone } from '../types'
 import { transformError } from '../utils'
+import { usePhoneValidation } from '../hooks/usePhoneValidation.hook'
 
 export const PhoneForm: React.FC<FormProps<Phone>> = ({ data, onChange }) => {
-  // fuck... this isn't going to work with dynamic forms
+  const { APIerrors, submitFailed, resetValidation } = useForm()
+
   const {
-    phone: {
-      getError,
-      resetValidationState,
-      validateAll,
-      validateOnBlur,
-      validateOnChange,
-    },
-    submitFailed,
-    resetValidation,
-  } = useForm() as IFormContext & { phone: ValidationObject<Phone> }
+    getError,
+    resetValidationState,
+    setValidationState,
+    validateAll,
+    validateOnBlur,
+    validateOnChange,
+  } = usePhoneValidation()
+
+  const handleChange = flow(eventNameValue, merge(data), onChange)
 
   React.useEffect(() => {
     submitFailed && validateAll(data)
   }, [submitFailed, data])
+
+  React.useEffect(() => {
+    APIerrors[data.id] && setValidationState(APIerrors[data.id])
+  }, [APIerrors])
 
   React.useEffect(() => {
     resetValidationState()
@@ -29,12 +36,12 @@ export const PhoneForm: React.FC<FormProps<Phone>> = ({ data, onChange }) => {
 
   return (
     <>
-      <Box2>
+      <Box2 mr="1rem" mb="1rem">
         <FieldText
           label="Number"
           name="number"
           onBlur={validateOnBlur(data)}
-          onChange={validateOnChange(onChange, data)}
+          onChange={validateOnChange(handleChange, data)}
           validationMessage={transformError(getError('number'))}
           value={data.number}
         />
@@ -44,7 +51,7 @@ export const PhoneForm: React.FC<FormProps<Phone>> = ({ data, onChange }) => {
           label="Description"
           name="description"
           onBlur={validateOnBlur(data)}
-          onChange={validateOnChange(onChange, data)}
+          onChange={validateOnChange(handleChange, data)}
           validationMessage={transformError(getError('description'))}
           value={data.description}
         />

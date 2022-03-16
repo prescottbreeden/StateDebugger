@@ -2,25 +2,23 @@ import React from 'react'
 import flow from 'lodash/fp/flow'
 import merge from 'lodash/fp/merge'
 import { Box2, FieldSelect, FieldText } from '@looker/components'
-import { FormProps, IFormContext, Pet } from '../types'
-import { ValidationObject } from '@de-formed/base'
+import { FormProps, Pet } from '../types'
 import { createFakeEvent, eventNameValue } from '@de-formed/base'
 import { transformError } from '../utils'
 import { useForm } from '../hooks/useForm.hook'
-import { DebugState } from '../components/DebugState.component'
+import { usePetValdiation } from '../hooks/usePetValidation.hook'
 
 export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
+  const { APIerrors, submitFailed, resetValidation } = useForm()
+
   const {
-    pet: {
-      getError,
-      resetValidationState,
-      validateAll,
-      validateOnBlur,
-      validateOnChange,
-    },
-    submitFailed,
-    resetValidation,
-  } = useForm() as IFormContext & { pet: ValidationObject<Pet> }
+    getError,
+    resetValidationState,
+    setValidationState,
+    validateAll,
+    validateOnBlur,
+    validateOnChange,
+  } = usePetValdiation()
 
   const handleChange = flow(eventNameValue, merge(data), onChange)
 
@@ -38,17 +36,15 @@ export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
   }, [submitFailed, data])
 
   React.useEffect(() => {
+    APIerrors[data.id] && setValidationState(APIerrors[data.id])
+  }, [APIerrors])
+
+  React.useEffect(() => {
     resetValidationState()
   }, [resetValidation])
 
   return (
     <>
-      <DebugState
-        state={data}
-        darkMode={false}
-        modalTitle="Pet Form State"
-        setState={onChange}
-      />
       <Box2 mb="1rem">
         <FieldText
           label="Name"

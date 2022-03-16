@@ -195,7 +195,7 @@ export const DebugState: React.FC<DebugStateProps> = ({
                   marginBottom: '1.2rem',
                 }}
               >
-                {JSON.stringify(state, null, 2)}
+                {state ? JSON.stringify(state, null, 2) : {}}
               </pre>
             )}
             <div

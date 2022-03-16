@@ -1,4 +1,5 @@
 import { ValidationState } from '@de-formed/base'
+import { randomString } from './hooks/useForm.hook'
 
 export type IFormContext = {
   FormContext: React.Context<IFormContext>
@@ -26,6 +27,7 @@ export type DynamicFormProps = {
 }
 
 export type Contact = {
+  id: string
   firstName: string
   lastName: string
   email: string
@@ -34,6 +36,7 @@ export type Contact = {
 }
 
 export const ContactFactory = (): Contact => ({
+  id: 'contact',
   firstName: '',
   lastName: '',
   email: '',
@@ -42,23 +45,27 @@ export const ContactFactory = (): Contact => ({
 })
 
 export type Pet = {
+  id: string
   name: string
   favoriteFood: string
   type: string
 }
 
 export const PetFactory = (): Pet => ({
+  id: 'pet',
   name: '',
   favoriteFood: '',
   type: '',
 })
 
 export type Phone = {
+  id: string
   number: string
   description: string
 }
 
 export const PhoneFactory = (): Phone => ({
+  id: 'phone1',
   number: '',
   description: '',
 })

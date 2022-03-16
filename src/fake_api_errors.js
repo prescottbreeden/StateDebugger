@@ -9,6 +9,16 @@ export const fakeAPIErrors = {
       errors: ['Not Man'],
     },
   },
+  phone1: {
+    number: {
+      isValid: false,
+      errors: ['this is fake'],
+    },
+    description: {
+      isValid: false,
+      errors: ['you are a terrible person'],
+    },
+  },
   pet: {
     name: {
       isValid: false,
