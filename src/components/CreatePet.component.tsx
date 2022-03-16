@@ -1,13 +1,10 @@
 import React from 'react'
 import { Box2, Button, Heading } from '@looker/components'
-import { useFormProvider } from '../hooks/useForm.hook'
 import { Pet, PetFactory } from '../types'
 import { PetForm } from '../forms/Pet.form'
 import { Query } from '../App'
+import { useFormProvider } from '../hooks/useForm.hook'
 import { usePetValdiation } from '../hooks/usePetValidation.hook'
-import { ValidationObject } from '@de-formed/base'
-
-type Dingo = { [key: string]: ValidationObject<any> }
 
 export const CreatePet: React.FC = () => {
   const [pet, setPet] = React.useState<Pet>(PetFactory())

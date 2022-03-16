@@ -1,11 +1,11 @@
 import React from 'react'
 import over from 'lodash/fp/over'
 import { Box2, Button, Heading } from '@looker/components'
-import { usePhoneValidation } from '../hooks/usePhoneValidation.hook'
-import { PhoneForm } from '../forms/Phone.form'
-import { useFormProvider } from '../hooks/useForm.hook'
 import { Phone, PhoneFactory } from '../types'
+import { PhoneForm } from '../forms/Phone.form'
 import { Query } from '../App'
+import { useFormProvider } from '../hooks/useForm.hook'
+import { usePhoneValidation } from '../hooks/usePhoneValidation.hook'
 
 export const CreatePhone: React.FC = () => {
   const [phone, setPhone] = React.useState<Phone>(PhoneFactory())

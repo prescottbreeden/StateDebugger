@@ -1,5 +1,4 @@
 import { ValidationState } from '@de-formed/base'
-import { randomString } from './hooks/useForm.hook'
 
 export type IFormContext = {
   FormContext: React.Context<IFormContext>
@@ -33,6 +32,7 @@ export type Contact = {
   email: string
   pet: Pet
   phones: Phone[]
+  bestFriend: Contact
 }
 
 export const ContactFactory = (): Contact => ({
@@ -42,6 +42,7 @@ export const ContactFactory = (): Contact => ({
   email: '',
   pet: PetFactory(),
   phones: [PhoneFactory()],
+  bestFriend: ContactFactory(),
 })
 
 export type Pet = {

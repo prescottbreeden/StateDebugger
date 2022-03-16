@@ -1,20 +1,16 @@
 import React from 'react'
 import flow from 'lodash/fp/flow'
 import merge from 'lodash/fp/merge'
-import { Contact, FormProps, Phone, PhoneFactory } from '../types'
 import { Box2, FieldText, Heading } from '@looker/components'
-import { PetForm } from './Pet.form'
-import { eventNameValue } from '@de-formed/base'
-import { set, transformError } from '../utils'
-import { randomString, useForm } from '../hooks/useForm.hook'
-import { DynamicForm } from './Dynamic.form'
-import { PhoneForm } from './Phone.form'
+import { Contact, FormProps, Phone, PhoneFactory } from '../types'
 import { DebugState } from '../components/DebugState.component'
+import { DynamicForm } from './Dynamic.form'
+import { PetForm } from './Pet.form'
+import { PhoneForm } from './Phone.form'
+import { eventNameValue } from '@de-formed/base'
+import { randomString, replaceItem, set, transformError } from '../utils'
 import { useContactValdiation } from '../hooks/useContactValidation.hook'
-
-export const replaceItem = (list: any[]) => (b: any) => {
-  return list.map((a: any) => (a.id === b.id ? b : a))
-}
+import { useForm } from '../hooks/useForm.hook'
 
 export const ContactForm: React.FC<FormProps<Contact>> = ({
   data,

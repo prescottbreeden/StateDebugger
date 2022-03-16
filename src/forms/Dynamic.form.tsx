@@ -1,6 +1,6 @@
 import React from 'react'
-import { Box2, Button } from '@looker/components'
 import type { DynamicFormProps } from '../types'
+import { Box2, Button } from '@looker/components'
 
 export const DynamicForm: React.FC<DynamicFormProps> = ({
   addForm,

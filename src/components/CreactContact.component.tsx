@@ -1,11 +1,11 @@
 import React from 'react'
 import over from 'lodash/fp/over'
 import { Box2, Button, Heading } from '@looker/components'
-import { useContactValdiation } from '../hooks/useContactValidation.hook'
+import { Contact, ContactFactory } from '../types'
 import { ContactForm } from '../forms/Contact.form'
 import { FormContext, useFormProvider } from '../hooks/useForm.hook'
-import { Contact, ContactFactory } from '../types'
 import { Query } from '../App'
+import { useContactValdiation } from '../hooks/useContactValidation.hook'
 
 export const CreateContact: React.FC = () => {
   const [contact, setContact] = React.useState<Contact>(ContactFactory())

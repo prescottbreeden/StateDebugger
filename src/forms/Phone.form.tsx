@@ -1,11 +1,11 @@
-import { Box2, FieldText } from '@looker/components'
 import React from 'react'
 import flow from 'lodash/fp/flow'
 import merge from 'lodash/fp/merge'
-import { eventNameValue } from '@de-formed/base'
-import { useForm } from '../hooks/useForm.hook'
+import { Box2, FieldText } from '@looker/components'
 import { FormProps, Phone } from '../types'
+import { eventNameValue } from '@de-formed/base'
 import { transformError } from '../utils'
+import { useForm } from '../hooks/useForm.hook'
 import { usePhoneValidation } from '../hooks/usePhoneValidation.hook'
 
 export const PhoneForm: React.FC<FormProps<Phone>> = ({ data, onChange }) => {
