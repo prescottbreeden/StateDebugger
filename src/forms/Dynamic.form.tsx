@@ -31,7 +31,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
           </Box2>
         ))}
       </Box2>
-      <Box2 display="flex">
+      <Box2 display="flex" mt="1rem">
         <Button onClick={addForm} className="button form__btn--add">
           + Add New Phone
         </Button>

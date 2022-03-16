@@ -1,42 +1,41 @@
-import { useValidation } from '@de-formed/react-validations'
-import { Contact } from '../types'
-import { usePetValdiation } from './usePetValidation.hook'
-const F = (_?: any) => false
+import {useValidation} from '@de-formed/react-validations'
+import {Contact} from '../types'
+import {usePetValdiation} from './usePetValidation.hook'
 const T = (_?: any) => true
 
 export const useContactValdiation = () => {
-  const { validateAll: validatePet } = usePetValdiation()
+  const {validateAll: validatePet} = usePetValdiation()
   return useValidation<Contact>({
     firstName: [
       {
         error: 'First Name is required',
-        validation: ({ firstName }) => firstName.length > 0,
+        validation: ({firstName}) => firstName.length > 0,
       },
       {
         error: 'First Name must be at least 2 characters',
-        validation: ({ firstName }) => firstName.length > 1,
+        validation: ({firstName}) => firstName.length > 1,
       },
     ],
     lastName: [
       {
         error: 'Last Name is required',
-        validation: ({ lastName }) => lastName.length > 0,
+        validation: ({lastName}) => lastName.length > 0,
       },
       {
         error: 'Last Name must be at least 2 characters',
-        validation: ({ lastName }) => lastName.length > 1,
+        validation: ({lastName}) => lastName.length > 1,
       },
     ],
     email: [
       {
         error: 'Email is required',
-        validation: ({ email }) => email.length > 0,
+        validation: ({email}) => email.length > 0,
       },
     ],
     pet: [
       {
         error: 'Pet is not valid',
-        validation: ({ pet }) => validatePet(pet),
+        validation: ({pet}) => validatePet(pet),
       },
     ],
     phones: [

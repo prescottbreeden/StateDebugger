@@ -1,14 +1,13 @@
-// import get from 'lodash/fp/get'
 import React from 'react'
 import flow from 'lodash/fp/flow'
 import merge from 'lodash/fp/merge'
 import { Box2, FieldSelect, FieldText } from '@looker/components'
-import { DebugState } from './DebugState.component'
 import { FormProps, IFormContext, Pet } from '../types'
 import { ValidationObject } from '@de-formed/base'
 import { createFakeEvent, eventNameValue } from '@de-formed/base'
 import { transformError } from '../utils'
-import { useForm } from './useForm.hook'
+import { useForm } from '../hooks/useForm.hook'
+import { DebugState } from '../components/DebugState.component'
 
 export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
   const {
@@ -18,7 +17,6 @@ export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
       validateAll,
       validateOnBlur,
       validateOnChange,
-      validationState,
     },
     submitFailed,
     resetValidation,
@@ -46,9 +44,10 @@ export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
   return (
     <>
       <DebugState
-        state={validationState}
+        state={data}
         darkMode={false}
-        windowName="Pet Validation State"
+        modalTitle="Pet Form State"
+        setState={onChange}
       />
       <Box2 mb="1rem">
         <FieldText

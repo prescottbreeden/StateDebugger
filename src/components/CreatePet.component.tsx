@@ -1,22 +1,18 @@
-import { Box2, Button } from '@looker/components'
 import React from 'react'
-import { Query } from '../App'
+import { Box2, Button, Heading } from '@looker/components'
+import { FormProvider } from '../hooks/useForm.hook'
 import { Pet, PetFactory } from '../types'
-import { PetForm } from './Pet.form'
-import { FormProvider } from './useForm.hook'
-import { usePetValdiation } from './usePetValidation.hook'
+import { PetForm } from '../forms/Pet.form'
+import { Query } from '../App'
+import { usePetValdiation } from '../hooks/usePetValidation.hook'
 
 interface CreatePetProps {}
 export const CreatePet: React.FC<CreatePetProps> = () => {
   const [pet, setPet] = React.useState<Pet>(PetFactory())
 
   const formProps = FormProvider()
-  const {
-    FormContext,
-    resetValidation,
-    setSubmitFailed,
-    setResetValidation,
-  } = formProps
+  const { FormContext, resetValidation, setSubmitFailed, setResetValidation } =
+    formProps
 
   const validations = {
     pet: usePetValdiation(),
@@ -41,8 +37,8 @@ export const CreatePet: React.FC<CreatePetProps> = () => {
 
   return (
     <FormContext.Provider value={{ ...formProps, ...validations }}>
-      <div style={{ width: '20rem' }}>
-        <h1>Create Pet</h1>
+      <Box2 width="20rem">
+        <Heading mb="1rem">Create Pet</Heading>
         <PetForm onChange={setPet} data={pet} />
         <Box2 display="flex" justifyContent="flex-end" mt="1rem">
           <Button mr="1rem" onClick={handleReset}>
@@ -50,7 +46,7 @@ export const CreatePet: React.FC<CreatePetProps> = () => {
           </Button>
           <Button onClick={handleSubmit}>Submit</Button>
         </Box2>
-      </div>
+      </Box2>
     </FormContext.Provider>
   )
 }

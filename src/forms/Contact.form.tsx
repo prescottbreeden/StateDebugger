@@ -6,8 +6,11 @@ import { Box2, FieldText, Heading } from '@looker/components'
 import { PetForm } from './Pet.form'
 import { eventNameValue } from '@de-formed/base'
 import { set, transformError } from '../utils'
-import { useForm } from './useForm.hook'
+import { useForm } from '../hooks/useForm.hook'
 import { ValidationObject } from '@de-formed/base'
+import { DynamicForm } from './Dynamic.form'
+import { PhoneForm } from './Phone.form'
+import { DebugState } from '../components/DebugState.component'
 
 export const ContactForm: React.FC<FormProps<Contact>> = ({
   data,
@@ -38,6 +41,11 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
 
   return (
     <>
+      <DebugState
+        state={data}
+        darkMode={false}
+        modalTitle="Contact Form State"
+      />
       <Box2 mb="1rem">
         <FieldText
           label="First Name"
@@ -68,8 +76,21 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
           value={data.email}
         />
       </Box2>
-      <Heading mb="1rem">Add Pet</Heading>
-      <PetForm onChange={handlePetChange} data={data.pet} />
+      <Box2 mb="1rem">
+        <Heading mb="1rem">Add Phones</Heading>
+        <DynamicForm
+          addForm={() => null}
+          form={PhoneForm}
+          items={data.phones}
+          onChange={() => null}
+          removeForm={() => null}
+        />
+      </Box2>
+
+      <Box2>
+        <Heading mb="1rem">Add Pet</Heading>
+        <PetForm onChange={handlePetChange} data={data.pet} />
+      </Box2>
     </>
   )
 }
