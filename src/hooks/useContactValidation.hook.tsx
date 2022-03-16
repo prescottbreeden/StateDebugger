@@ -24,7 +24,8 @@ import { usePhoneValidation } from './usePhoneValidation.hook'
  *
  */
 
-// TODO - this is a bit of a hack
+// TODO - this is a bit of a hack -- however it does kinda emphasize you can
+// really do just about anything you want with weird edge cases
 const contactValidations: { [key: string]: any } = {
   firstName: [
     {
@@ -54,6 +55,38 @@ const contactValidations: { [key: string]: any } = {
   ],
 }
 
+// TODO - unit test the snot out of this
+export const validateBestFriend = (
+  validatePet: Function,
+  validatePhone: Function
+) => ({ bestFriend }: Contact) => {
+  if (!bestFriend) {
+    return true
+  }
+  // check if the nested types pass
+  const nestedTypes = [
+    validatePet(bestFriend.pet),
+    bestFriend.phones.map((p) => validatePhone(p)).every(Boolean),
+  ].every(Boolean)
+
+  // TODO: to cond or not to cond?
+  const nonNestedTypes = Object.keys(contactValidations).reduce(
+    (acc: boolean, curr: string) => {
+      if (contactValidations[curr]) {
+        const valid = contactValidations[curr]
+          .map((v: any) => v.validation(bestFriend))
+          .every(Boolean)
+        return acc ? valid : acc
+      } else {
+        return acc
+      }
+    },
+    true
+  )
+  return nestedTypes && nonNestedTypes
+}
+
+// This is the actual hook that has been broken up by responsibilities
 export const useContactValdiation = () => {
   const { validateAll: validatePet } = usePetValdiation()
   const { validateAll: validatePhone } = usePhoneValidation()
@@ -76,36 +109,7 @@ export const useContactValdiation = () => {
     bestFriend: [
       {
         error: 'Best Friend is not valid',
-        validation: ({ bestFriend }) => {
-          // TODO - this is not a great way to do this
-
-          // go until you can't go any further
-          if (!bestFriend) {
-            return true
-          }
-
-          // check if the nested types pass
-          const nestedTypes = [
-            validatePet(bestFriend.pet),
-            bestFriend.phones.map((p) => validatePhone(p)).every(Boolean),
-          ].every(Boolean)
-
-          // TODO: to cond or not to cond?
-          const nonNestedTypes = Object.keys(contactValidations).reduce(
-            (acc: boolean, curr: string) => {
-              if (contactValidations[curr]) {
-                const valid = contactValidations[curr]
-                  .map((v: any) => v.validation(bestFriend))
-                  .every(Boolean)
-                return acc ? valid : acc
-              } else {
-                return acc
-              }
-            },
-            true
-          )
-          return nestedTypes && nonNestedTypes
-        },
+        validation: validateBestFriend(validatePet, validatePhone),
       },
     ],
   })
