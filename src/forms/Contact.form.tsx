@@ -17,7 +17,7 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
   data,
   onChange,
 }) => {
-  const { APIerrors, setAPIerrors, submitFailed, resetValidation } = useForm()
+  const { APIerrors, submitFailed, resetValidation } = useForm()
 
   const {
     getError,
@@ -77,17 +77,6 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
         state={data}
         darkMode={false}
         modalTitle="Contact Form State"
-      />
-      <DebugState
-        state={validationState}
-        darkMode={false}
-        modalTitle="Contact Validation State"
-      />
-      <DebugState
-        state={APIerrors}
-        setState={setAPIerrors}
-        darkMode={false}
-        modalTitle="API Errors"
       />
       <Box2 mb="1rem">
         <FieldText

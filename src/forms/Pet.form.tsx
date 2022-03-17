@@ -8,6 +8,7 @@ import { createFakeEvent, eventNameValue } from '@de-formed/base'
 import { transformError } from '../utils'
 import { useForm } from '../hooks/useForm.hook'
 import { usePetValdiation } from '../hooks/usePetValidation.hook'
+import { DebugState } from '../components/DebugState.component'
 
 export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
   const { APIerrors, submitFailed, resetValidation } = useForm()
@@ -54,6 +55,12 @@ export const PetForm: React.FC<FormProps<Pet>> = ({ data, onChange }) => {
 
   return (
     <>
+      <DebugState
+        state={data}
+        setState={onChange}
+        darkMode={false}
+        modalTitle="Pet Form State"
+      />
       <Box2 mb="1rem">
         <FieldText
           label="Name"
