@@ -35,7 +35,7 @@ export type Contact = {
   bestFriend: Contact | undefined
 }
 
-export const ContactFactory = (): Contact => ({
+export const ContactFactory = (props?: Partial<Contact>): Contact => ({
   id: 'contact',
   firstName: '',
   lastName: '',
@@ -43,6 +43,7 @@ export const ContactFactory = (): Contact => ({
   pet: PetFactory(),
   phones: [PhoneFactory()],
   bestFriend: undefined,
+  ...props
 })
 
 export type Pet = {
@@ -52,11 +53,12 @@ export type Pet = {
   type: string
 }
 
-export const PetFactory = (): Pet => ({
+export const PetFactory = (props?: Partial<Pet>): Pet => ({
   id: 'pet',
   name: '',
   favoriteFood: '',
   type: '',
+  ...props
 })
 
 export type Phone = {
@@ -65,8 +67,9 @@ export type Phone = {
   description: string
 }
 
-export const PhoneFactory = (): Phone => ({
+export const PhoneFactory = (props?: Partial<Phone>): Phone => ({
   id: 'phone1',
   number: '',
   description: '',
+  ...props
 })

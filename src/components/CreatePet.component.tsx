@@ -2,7 +2,7 @@ import React from 'react'
 import { Box2, Button, Heading } from '@looker/components'
 import { Pet, PetFactory } from '../types'
 import { PetForm } from '../forms/Pet.form'
-import { Query } from '../App'
+import { Query } from '../service'
 import { FormContext, useFormProvider } from '../hooks/useForm.hook'
 import { usePetValdiation } from '../hooks/usePetValidation.hook'
 

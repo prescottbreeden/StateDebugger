@@ -9,7 +9,7 @@ import { usePhoneValidation } from './usePhoneValidation.hook'
  *
  * All non-nested validations are defined in an object
  * All nested validations are defined in the useValidation hook which spreads
- * the non-nested validations since they're just data
+ * the non-nested validations since they're just objects
  *
  * @Example
  * Contact type
@@ -55,36 +55,39 @@ const contactValidations: { [key: string]: any } = {
   ],
 }
 
-// TODO - unit test the snot out of this
-export const validateBestFriend = (
-  validatePet: Function,
-  validatePhone: Function
-) => ({ bestFriend }: Contact) => {
-  if (!bestFriend) {
-    return true
-  }
-  // check if the nested types pass
-  const nestedTypes = [
-    validatePet(bestFriend.pet),
-    bestFriend.phones.map((p) => validatePhone(p)).every(Boolean),
-  ].every(Boolean)
+/**
+ * If a Contact has a best friend, check both nasted and non-nested data types
+ * within the form data. Otherwise return true.
+ */
+export const validateBestFriend =
+  (validatePet: Function, validatePhone: Function) =>
+  ({ bestFriend }: Contact) => {
+    if (!bestFriend) {
+      return true
+    }
 
-  // TODO: to cond or not to cond?
-  const nonNestedTypes = Object.keys(contactValidations).reduce(
-    (acc: boolean, curr: string) => {
-      if (contactValidations[curr]) {
-        const valid = contactValidations[curr]
-          .map((v: any) => v.validation(bestFriend))
-          .every(Boolean)
-        return acc ? valid : acc
-      } else {
-        return acc
-      }
-    },
-    true
-  )
-  return nestedTypes && nonNestedTypes
-}
+    const nestedTypes = [
+      validatePet(bestFriend.pet),
+      bestFriend.phones.map((p) => validatePhone(p)).every(Boolean),
+    ].every(Boolean)
+
+    // reduce the contactValidations object applying the bestFriend data to each
+    // validation property
+    const nonNestedTypes = Object.keys(contactValidations).reduce(
+      (acc: boolean, curr: string) => {
+        if (contactValidations[curr]) {
+          const valid = contactValidations[curr]
+            .map((v: { validation: Function }) => v.validation(bestFriend))
+            .every(Boolean)
+          return acc ? valid : acc
+        } else {
+          return acc
+        }
+      },
+      true
+    )
+    return nestedTypes && nonNestedTypes
+  }
 
 // This is the actual hook that has been broken up by responsibilities
 export const useContactValdiation = () => {

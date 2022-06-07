@@ -31,6 +31,7 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
 
   const handleChange = flow(eventNameValue, merge(data), onChange)
   const handlePetChange = flow(set('pet'), merge(data), onChange)
+  const handleBffChange = flow(set('bestFriend'), merge(data), onChange)
 
   const addNewPhone = () =>
     onChange({
@@ -73,55 +74,65 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
 
   return (
     <>
-      <DebugState
-        state={data}
-        darkMode={false}
-        modalTitle="Contact Form State"
-      />
-      <Box2 mb="1rem">
-        <FieldText
-          label="First Name"
-          name="firstName"
-          onBlur={validateOnBlur(data)}
-          onChange={validateOnChange(handleChange, data)}
-          validationMessage={transformError(getError('firstName'))}
-          value={data.firstName}
-        />
+      <DebugState state={data} />
+      <Box2 display="flex">
+        <Box2 width="20rem" mr="1rem">
+          <Heading mb="1rem">General Info</Heading>
+          <Box2 mb="1rem">
+            <FieldText
+              label="First Name"
+              name="firstName"
+              onBlur={validateOnBlur(data)}
+              onChange={validateOnChange(handleChange, data)}
+              validationMessage={transformError(getError('firstName'))}
+              value={data.firstName}
+            />
+          </Box2>
+          <Box2 mb="1rem">
+            <FieldText
+              label="Last Name"
+              name="lastName"
+              onBlur={validateOnBlur(data)}
+              onChange={validateOnChange(handleChange, data)}
+              validationMessage={transformError(getError('lastName'))}
+              value={data.lastName}
+            />
+          </Box2>
+          <Box2 mb="1rem">
+            <FieldText
+              label="Email"
+              name="email"
+              onBlur={validateOnBlur(data)}
+              onChange={validateOnChange(handleChange, data)}
+              validationMessage={transformError(getError('email'))}
+              value={data.email}
+            />
+          </Box2>
+          <Box2 mb="1rem">
+            <Heading mb="1rem">Phone(s)</Heading>
+            <DynamicForm
+              addForm={addNewPhone}
+              form={PhoneForm}
+              items={data.phones}
+              onChange={updatePhone}
+              removeForm={deletePhone}
+            />
+          </Box2>
+        </Box2>
+        <Box2 ml="1rem" width="20rem">
+          <Heading mb="1rem">Pet</Heading>
+          <PetForm onChange={handlePetChange} data={data.pet} />
+        </Box2>
       </Box2>
-      <Box2 mb="1rem">
-        <FieldText
-          label="Last Name"
-          name="lastName"
-          onBlur={validateOnBlur(data)}
-          onChange={validateOnChange(handleChange, data)}
-          validationMessage={transformError(getError('lastName'))}
-          value={data.lastName}
-        />
-      </Box2>
-      <Box2 mb="1rem">
-        <FieldText
-          label="Email"
-          name="email"
-          onBlur={validateOnBlur(data)}
-          onChange={validateOnChange(handleChange, data)}
-          validationMessage={transformError(getError('email'))}
-          value={data.email}
-        />
-      </Box2>
-      <Box2 mb="1rem">
-        <Heading mb="1rem">Add Phone</Heading>
-        <DynamicForm
-          addForm={addNewPhone}
-          form={PhoneForm}
-          items={data.phones}
-          onChange={updatePhone}
-          removeForm={deletePhone}
-        />
-      </Box2>
-      <Box2>
-        <Heading mb="1rem">Add Pet</Heading>
-        <PetForm onChange={handlePetChange} data={data.pet} />
-      </Box2>
+      {data.bestFriend && (
+        <>
+          <hr />
+          <Heading my="1rem">Add Your BFF</Heading>
+          <Box2 mb="1rem">
+            <ContactForm data={data.bestFriend} onChange={handleBffChange} />
+          </Box2>
+        </>
+      )}
     </>
   )
 }

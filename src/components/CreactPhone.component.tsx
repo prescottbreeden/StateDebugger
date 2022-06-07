@@ -3,7 +3,7 @@ import over from 'lodash/fp/over'
 import { Box2, Button, Heading } from '@looker/components'
 import { Phone, PhoneFactory } from '../types'
 import { PhoneForm } from '../forms/Phone.form'
-import { Query } from '../App'
+import { Query } from '../service'
 import { FormContext, useFormProvider } from '../hooks/useForm.hook'
 import { usePhoneValidation } from '../hooks/usePhoneValidation.hook'
 

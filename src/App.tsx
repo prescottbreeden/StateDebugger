@@ -1,29 +1,23 @@
 import './App.css'
 import { Box2, ComponentsProvider } from '@looker/components'
-import { CreateContact } from './components/CreactContact.component'
-import { CreatePet } from './components/CreatePet.component'
-import { CreatePhone } from './components/CreactPhone.component'
-import { fakeAPIErrors } from './fake_api_errors'
-
-export const Query = (_payload: any) => {
-  return new Promise((resolve, _reject) => {
-    setTimeout(() => {
-      resolve({
-        ...fakeAPIErrors,
-      })
-    }, 1000)
-  })
-}
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Ex1 } from './pages/Ex1.page'
+import { Ex2 } from './pages/Ex2.page'
+import { Ex3 } from './pages/Ex3.page'
+import { Home } from './pages/Home.page'
 
 function App() {
   return (
     <ComponentsProvider>
       <Box2 display="flex" p="1rem 2rem">
-        <CreateContact />
-        <Box2 width="2rem" />
-        <CreatePet />
-        <Box2 width="2rem" />
-        <CreatePhone />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/ex1" element={<Ex1 />} />
+            <Route path="/ex2" element={<Ex2 />} />
+            <Route path="/ex3" element={<Ex3 />} />
+          </Routes>
+        </BrowserRouter>
       </Box2>
     </ComponentsProvider>
   )

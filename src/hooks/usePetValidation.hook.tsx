@@ -17,8 +17,8 @@ export const usePetValdiation = () => {
     ],
     type: [
       {
-        error: 'Type must be a Dog',
-        validation: ({ type }) => type.toLowerCase() === 'dog',
+        error: 'Type must be a Crab',
+        validation: ({ type }) => type.toLowerCase() === 'crab',
       },
     ],
   })

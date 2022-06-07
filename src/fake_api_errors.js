@@ -2,31 +2,43 @@ export const fakeAPIErrors = {
   contact: {
     firstName: {
       isValid: false,
-      errors: ['Not Pac'],
+      errors: ['Not Bob.'],
     },
     lastName: {
       isValid: false,
-      errors: ['Not Man'],
+      errors: ['Not Ross.'],
     },
   },
   phone1: {
     number: {
       isValid: false,
-      errors: ['this is fake'],
+      errors: ['This is a fake phone.'],
     },
     description: {
       isValid: false,
-      errors: ['you are a terrible person'],
+      errors: ['How could you leave this blank?!'],
     },
   },
   pet: {
     name: {
       isValid: false,
-      errors: ['Not Bob Ross'],
+      errors: ['Not Garfield.'],
     },
     favoriteFood: {
       isValid: false,
-      errors: ['Not Food'],
+      errors: ['Crabs are friends not food.'],
+    },
+  },
+  bestFriend: {
+    firstName: {
+      isValid: false,
+      errors: ['You don\'t have any friends'],
+    },
+  },
+  bestFriendPet: {
+    name: {
+      isValid: false,
+      errors: ['Imaginary friends don\'t have pets.'],
     },
   },
 }

@@ -160,7 +160,9 @@ export const DebugState: React.FC<DebugStateProps> = ({
             padding: '10px 20px',
             backgroundColor: transparent ? 'transparent' : backgroundColor,
             cursor: 'default',
-            maxWidth: maxWidth ?? '90vh',
+            maxWidth: maxWidth ?? '90vw',
+            maxHeight: '40rem',
+            overflow: 'scroll'
           }}
         >
           <div style={{ width: '100%' }}>
