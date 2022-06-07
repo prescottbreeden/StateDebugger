@@ -4,7 +4,7 @@ import get from 'lodash/fp/get'
 import merge from 'lodash/fp/merge'
 import { Box2, FieldText, Heading } from '@looker/components'
 import { Contact, FormProps, Phone, PhoneFactory } from '../types'
-// import { DebugState } from '../components/DebugState.component'
+import { DebugState } from '../components/DebugState.component'
 import { DynamicForm } from './Dynamic.form'
 import { PetForm } from './Pet.form'
 import { PhoneForm } from './Phone.form'
@@ -72,9 +72,9 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
     resetValidationState()
   }, [resetValidation])
 
-  // <DebugState state={data} />
   return (
     <>
+      <DebugState state={data} setState={onChange} modalTitle={data.id}/>
       <Box2 display="flex">
         <Box2 width="20rem" mr="1rem">
           <Heading mb="1rem">General Info</Heading>

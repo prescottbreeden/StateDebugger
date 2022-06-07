@@ -1,0 +1,76 @@
+{
+  "id": "contact",
+  "firstName": "bob",
+  "lastName": "ross",
+  "email": "bob@bob.com",
+  "pet": {
+    "id": "pet",
+    "name": "alkdfj",
+    "favoriteFood": "lkjadf",
+    "type": "crab"
+  },
+  "phones": [
+    {
+      "id": "phone1",
+      "number": "1231231234",
+      "description": ""
+    }
+  ],
+  "bestFriend": {
+    "id": "bestFriend",
+    "firstName": "bob",
+    "lastName": "ross",
+    "email": "bob@bob.com",
+    "pet": {
+      "id": "pet",
+      "name": "alkdfj",
+      "favoriteFood": "lkjadf",
+      "type": "crab"
+    },
+    "phones": [
+      {
+        "id": "phone1",
+        "number": "1231231234",
+        "description": ""
+      }
+    ],
+    "bestFriend": {
+      "id": "bestFriend2",
+      "firstName": "bob",
+      "lastName": "ross",
+      "email": "bob@bob.com",
+      "pet": {
+        "id": "pet",
+        "name": "alkdfj",
+        "favoriteFood": "lkjadf",
+        "type": "crab"
+      },
+      "phones": [
+        {
+          "id": "phone1",
+          "number": "1231231234",
+          "description": ""
+        }
+      ],
+      "bestFriend": {
+        "id": "bestFriend3",
+        "firstName": "adlfkj",
+        "lastName": "lkjadf",
+        "email": "silly@sally.com",
+        "pet": {
+          "id": "bestFriendPet",
+          "name": "aldfkj",
+          "favoriteFood": "lkjsdf",
+          "type": "crab"
+        },
+        "phones": [
+          {
+            "id": "bestFriendPhone",
+            "number": "1231231234",
+            "description": ""
+          }
+        ]
+      }
+    }
+  }
+}
