@@ -1,4 +1,5 @@
 import { useValidation } from '@de-formed/react-validations'
+import { ValidationSchema } from '@de-formed/base'
 import { Contact } from '../types'
 import { usePetValdiation } from './usePetValidation.hook'
 import { usePhoneValidation } from './usePhoneValidation.hook'
@@ -26,7 +27,7 @@ import { usePhoneValidation } from './usePhoneValidation.hook'
 
 // TODO - this is a bit of a hack -- however it does kinda emphasize you can
 // really do just about anything you want with weird edge cases
-const contactValidations: { [key: string]: any } = {
+const contactValidations: ValidationSchema<Contact> = {
   firstName: [
     {
       error: 'First Name is required',

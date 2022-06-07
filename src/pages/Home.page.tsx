@@ -1,13 +1,59 @@
 import React from 'react'
-import { Box2 } from '@looker/components'
+import { Box2, Button, Heading } from '@looker/components'
 
-interface HomeProps {}
-export const Home: React.FC<HomeProps> = (props) => {
+export const Home: React.FC = () => {
+  const [showWisdom, setShowWisdom] = React.useState(false)
   return (
     <>
-      <Box2>
-        <h1>Super Tooling Development Tooling</h1>
-        <p>Lack of interactive data-oriented debugging tools</p>
+      <Box2 mx="15rem" display="flex" justifyContent="space-between">
+        <Box2 p="2rem" style={{
+            border: '1px solid black',
+            borderRadius: '5px'
+          }}
+        >
+        <Heading mb="1rem">Composable Forms with Composable Validations</Heading>
+        <Box2 mb="2rem">
+        <Heading mb="1rem">
+          Must be able to:
+        </Heading>
+          <ul>
+            <li>Drop a form inside of any other form</li>
+            <li>Handle dynamic forms</li>
+            <li>Show validation errors appropriately</li>
+            <li>Handle recursive data types</li>
+          </ul>
+        </Box2>
+      </Box2>
+        <Box2 p="2rem" style={{
+            border: '1px solid black',
+            borderRadius: '5px'
+          }}
+        >
+        <Heading mb="1rem">Super Tooling Development Tooling</Heading>
+        <Box2 mb="2rem">
+        <Heading mb="1rem">
+          I tried to make a super hard thing and found:
+        </Heading>
+          <ul>
+            <li>Lack of interactive data-oriented debugging tools</li>
+            <li>Console logs are tedious</li>
+          </ul>
+        </Box2>
+        <Button onClick={() => setShowWisdom((state) => !state)}>
+          Show Wisdom
+        </Button>
+        {showWisdom && (
+          <>
+        <Heading my="1rem">
+            What this actually means:
+        </Heading>
+            <ul>
+              <li>I'm lazy</li>
+              <li>I'm impatient</li>
+            </ul>
+          </>
+        )}
+      </Box2>
       </Box2>
     </>
   )

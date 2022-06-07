@@ -11,8 +11,8 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
 }) => (
   <>
     <Box2 display="flex" flexDirection="column">
-      {items.map((data: any, i: number) => (
-        <Box2 display="flex" key={i}>
+      {items.map((data: { id: string }, i: number) => (
+        <Box2 display="flex" key={`${data.id}-${i}`}>
           {React.createElement(form, {
             data,
             onChange,
