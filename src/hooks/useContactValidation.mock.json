@@ -22,7 +22,7 @@
     "lastName": "ross",
     "email": "bob@bob.com",
     "pet": {
-      "id": "pet",
+      "id": "bestFriendPet",
       "name": "alkdfj",
       "favoriteFood": "lkjadf",
       "type": "crab"
@@ -40,7 +40,7 @@
       "lastName": "ross",
       "email": "bob@bob.com",
       "pet": {
-        "id": "pet",
+        "id": "pet2",
         "name": "alkdfj",
         "favoriteFood": "lkjadf",
         "type": "crab"
@@ -58,14 +58,14 @@
         "lastName": "lkjadf",
         "email": "silly@sally.com",
         "pet": {
-          "id": "bestFriendPet",
+          "id": "pet3",
           "name": "aldfkj",
           "favoriteFood": "lkjsdf",
           "type": "crab"
         },
         "phones": [
           {
-            "id": "bestFriendPhone",
+            "id": "phone1",
             "number": "1231231234",
             "description": ""
           }

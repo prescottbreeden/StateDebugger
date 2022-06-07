@@ -74,7 +74,7 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
 
   return (
     <>
-      <DebugState state={data} setState={onChange} modalTitle={data.id}/>
+      <DebugState state={data} setState={onChange} modalTitle={data.id} />
       <Box2 display="flex">
         <Box2 width="20rem" mr="1rem">
           <Heading mb="1rem">General Info</Heading>
