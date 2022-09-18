@@ -1,17 +1,24 @@
 import React from 'react'
-import flow from 'lodash/fp/flow'
-import get from 'lodash/fp/get'
-import merge from 'lodash/fp/merge'
 import { Box2, FieldText, Heading } from '@looker/components'
-import { Contact, FormProps, Phone, PhoneFactory } from '../types'
-import { DebugState } from '../components/DebugState.component'
+import { Contact, FormProps, Pet, Phone, PhoneFactory } from '../types'
+import { StateDebugger } from '../components/StateDebugger.component'
 import { DynamicForm } from './Dynamic.form'
+import { ValidationState } from '@de-formed/base'
 import { PetForm } from './Pet.form'
 import { PhoneForm } from './Phone.form'
 import { eventNameValue } from '@de-formed/base'
-import { randomString, replaceItem, set, transformError } from '../utils'
+import { randomString, transformError } from '../utils'
 import { useContactValdiation } from '../hooks/useContactValidation.hook'
 import { useForm } from '../hooks/useForm.hook'
+
+type APIerrors = {
+  [key: string]: ValidationState
+}
+
+// --[ local utils ]-----------------------------------------------------------
+const replacePhone = (list: Phone[]) => (b: Phone) => {
+  return list.map((a: Phone) => (a.id === b.id ? b : a))
+}
 
 export const ContactForm: React.FC<FormProps<Contact>> = ({
   data,
@@ -29,52 +36,56 @@ export const ContactForm: React.FC<FormProps<Contact>> = ({
     validationState,
   } = useContactValdiation()
 
-  const handleChange = flow(eventNameValue, merge(data), onChange)
-  const handlePetChange = flow(set('pet'), merge(data), onChange)
-  const handleBffChange = flow(set('bestFriend'), merge(data), onChange)
+  const handleChange = (event: any): void =>
+    onChange({
+      ...data,
+      ...eventNameValue(event),
+    })
 
-  const addNewPhone = () =>
+  const handlePetChange = (pet: Pet): void => onChange({ ...data, pet })
+
+  const handleBffChange = (bestFriend: Contact): void =>
+    onChange({ ...data, bestFriend })
+
+  const addNewPhone = (): void =>
     onChange({
       ...data,
       phones: [...data.phones, { ...PhoneFactory(), id: randomString() }],
     })
 
-  const deletePhone = (p1: Phone) => {
-    const phones = data.phones.filter((p2: Phone) => {
-      return p1.id !== p2.id
+  const deletePhone = (phone: Phone): void =>
+    onChange({
+      ...data,
+      phones: data.phones.filter((existing: Phone) => phone.id !== existing.id),
     })
-    return onChange({ ...data, phones })
-  }
 
-  const updatePhone = flow(
-    replaceItem(data.phones),
-    set('phones'),
-    merge(data),
-    onChange
-  )
+  const updatePhone = (phone: Phone): void =>
+    onChange({
+      ...data,
+      phones: replacePhone(data.phones)(phone),
+    })
 
-  // merge the API errors with the current validationState
-  const mergeApiErrors = flow(
-    get(data.id),
-    merge(validationState),
-    setValidationState
-  )
+  const mergeApiErrors = (errors: APIerrors): void =>
+    setValidationState({
+      ...validationState,
+      ...errors[data.id],
+    })
 
   React.useEffect(() => {
     submitFailed && validateAll(data)
-  }, [submitFailed, data])
+  }, [submitFailed, data]) // eslint-disable-line
 
   React.useEffect(() => {
     APIerrors[data.id] && mergeApiErrors(APIerrors)
-  }, [APIerrors])
+  }, [APIerrors, data.id]) // eslint-disable-line
 
   React.useEffect(() => {
     resetValidationState()
-  }, [resetValidation])
+  }, [resetValidation]) // eslint-disable-line
 
   return (
     <>
-      <DebugState state={data} setState={onChange} modalTitle={data.id} />
+      <StateDebugger state={data} setState={onChange} modalTitle={data.id} />
       <Box2 display="flex">
         <Box2 width="20rem" mr="1rem">
           <Heading mb="1rem">General Info</Heading>

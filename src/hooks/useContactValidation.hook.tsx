@@ -5,12 +5,7 @@ import { usePetValdiation } from './usePetValidation.hook'
 import { usePhoneValidation } from './usePhoneValidation.hook'
 
 /**
- * While not exactly glamorous, this would validate recursive types that have
- * nested types (oofta... what a use case...)
- *
- * All non-nested validations are defined in an object
- * All nested validations are defined in the useValidation hook which spreads
- * the non-nested validations since they're just objects
+ * Recursive Form Data Validations
  *
  * @Example
  * Contact type
@@ -23,80 +18,77 @@ import { usePhoneValidation } from './usePhoneValidation.hook'
  *   bestFriend: { Contact }
  * }
  *
+ * Implementation:
+ * All nested schema definitions are defined in the useValidation hook which
+ * merges the non-nested schema definitions defined separately. The purpose of
+ * separately defining the non-nested validations is to allow a helper function
+ * to manually map over the nested and non-nested types when it goes to recurse
+ * on the bestFriend property.
  */
 
-// TODO - this is a bit of a hack -- however it does kinda emphasize you can
-// really do just about anything you want with weird edge cases
-const contactValidations: ValidationSchema<Contact> = {
+// non-recursive schema properties
+const contactBaseValidationSchema: ValidationSchema<Contact> = {
   firstName: [
     {
       error: 'First Name is required',
-      validation: ({ firstName }: Contact) => firstName.length > 0,
+      validation: ({ firstName }) => firstName.length > 0,
     },
     {
       error: 'First Name must be at least 2 characters',
-      validation: ({ firstName }: Contact) => firstName.length > 1,
+      validation: ({ firstName }) => firstName.length > 1,
     },
   ],
   lastName: [
     {
       error: 'Last Name is required',
-      validation: ({ lastName }: Contact) => lastName.length > 0,
+      validation: ({ lastName }) => lastName.length > 0,
     },
     {
       error: 'Last Name must be at least 2 characters',
-      validation: ({ lastName }: Contact) => lastName.length > 1,
+      validation: ({ lastName }) => lastName.length > 1,
     },
   ],
   email: [
     {
       error: 'Email is required',
-      validation: ({ email }: Contact) => email.length > 0,
+      validation: ({ email }) => email.length > 0,
     },
   ],
 }
 
-/**
- * If a Contact has a best friend, check both nasted and non-nested data types
- * within the form data. Otherwise return true.
- */
-export const validateBestFriend =
+ // If a Contact has a best friend check both nested and non-nested properties
+ // within the form data
+const validateBestFriend =
   (validatePet: Function, validatePhone: Function) =>
   ({ bestFriend }: Contact) => {
-    if (!bestFriend) {
-      return true
-    }
+    if (!bestFriend) return true
 
-    const nestedTypes = [
+    // validate nested properties
+    const validPetAndPhones = [
       validatePet(bestFriend.pet),
       bestFriend.phones.map((p) => validatePhone(p)).every(Boolean),
     ].every(Boolean)
 
-    // reduce the contactValidations object applying the bestFriend data to each
-    // validation property
-    const nonNestedTypes = Object.keys(contactValidations).reduce(
-      (acc: boolean, curr: string) => {
-        if (contactValidations[curr]) {
-          const valid = contactValidations[curr]
-            .map((v: { validation: Function }) => v.validation(bestFriend))
-            .every(Boolean)
-          return acc ? valid : acc
-        } else {
-          return acc
-        }
-      },
+    // reduce the contactValidations object applying the bestFriend data to
+    // each validation property
+    const baseValidations = Object.keys(contactBaseValidationSchema).reduce(
+      (acc: boolean, curr: string) =>
+        contactBaseValidationSchema[curr] && acc
+          ? contactBaseValidationSchema[curr]
+              .map((v: { validation: Function }) => v.validation(bestFriend))
+              .every(Boolean)
+          : acc,
       true
     )
-    return nestedTypes && nonNestedTypes
+    return validPetAndPhones && baseValidations
   }
 
-// This is the actual hook that has been broken up by responsibilities
 export const useContactValdiation = () => {
   const { validateAll: validatePet } = usePetValdiation()
   const { validateAll: validatePhone } = usePhoneValidation()
 
   return useValidation<Contact>({
-    ...contactValidations,
+    ...contactBaseValidationSchema,
     pet: [
       {
         error: 'Pet is not valid',

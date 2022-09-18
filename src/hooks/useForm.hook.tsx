@@ -9,11 +9,11 @@ export const useFormProvider = () => {
   const [APIerrors, setAPIerrors] = React.useState<any>({})
 
   return {
-    submitFailed,
-    setSubmitFailed,
-    resetValidation,
-    setResetValidation,
     APIerrors,
+    resetValidation,
     setAPIerrors,
+    setResetValidation,
+    setSubmitFailed,
+    submitFailed,
   }
 }

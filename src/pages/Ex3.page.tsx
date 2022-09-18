@@ -1,5 +1,5 @@
 import React from 'react'
-import { DebugState } from '../components/DebugState.component'
+import { StateDebugger } from '../components/StateDebugger.component'
 import {Query} from '../service'
 
 export const Ex3: React.FC = () => {
@@ -12,7 +12,7 @@ export const Ex3: React.FC = () => {
   return (
     <>
       <h1>What's going on with my API Data?</h1>
-      <DebugState state={results} />
+      <StateDebugger state={results} />
     </>
   )
 }
